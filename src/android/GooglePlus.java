@@ -99,8 +99,8 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
         this.savedCallbackContext = callbackContext;
 
         if (ACTION_IS_AVAILABLE.equals(action)) {
-            final boolean avail = true;
-            savedCallbackContext.success("" + avail);
+            final boolean available = true;
+            savedCallbackContext.success(toStatus("success", String.valueOf(available)));
 
         } else if (ACTION_LOGIN.equals(action)) {
             //pass args into api client build
@@ -231,7 +231,7 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
      */
     private void signOut() {
         if (this.mGoogleApiClient == null) {
-            savedCallbackContext.error("Please use login or trySilentLogin before logging out");
+            savedCallbackContext.error(toStatus("error", "Please use login or trySilentLogin before logging out"));
             return;
         }
 
@@ -244,9 +244,9 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
                         public void onResult(Status status) {
                             //on success, tell cordova
                             if (status.isSuccess()) {
-                                savedCallbackContext.success("Logged user out");
+                                savedCallbackContext.success(toStatus("success", "Logged user out"));
                             } else {
-                                savedCallbackContext.error(status.getStatusCode());
+                                savedCallbackContext.error(toStatus("error", String.valueOf(status.getStatusCode())));
                             }
                         }
                     }
@@ -259,7 +259,7 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
      */
     private void disconnect() {
         if (this.mGoogleApiClient == null) {
-            savedCallbackContext.error("Please use login or trySilentLogin before disconnecting");
+            savedCallbackContext.error(toStatus("error", "Please use login or trySilentLogin before disconnecting"));
             return;
         }
 
@@ -271,9 +271,9 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
                         @Override
                         public void onResult(Status status) {
                             if (status.isSuccess()) {
-                                savedCallbackContext.success("Disconnected user");
+                                savedCallbackContext.success(toStatus("success", "Disconnected user"));
                             } else {
-                                savedCallbackContext.error(status.getStatusCode());
+                                savedCallbackContext.error(toStatus("error", String.valueOf(status.getStatusCode())));
                             }
                         }
                     }
@@ -289,7 +289,7 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         Log.i(TAG, "Unresolvable failure in connecting to Google APIs");
-        savedCallbackContext.error(result.getErrorCode());
+        savedCallbackContext.error(toStatus("error", String.valueOf(result.getErrorCode())));
     }
 
 
@@ -312,12 +312,12 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
      */
     private void handleSignInResult(final GoogleSignInResult signInResult) {
         if (this.mGoogleApiClient == null) {
-            savedCallbackContext.error("GoogleApiClient was never initialized");
+            savedCallbackContext.error(toStatus("error", "GoogleApiClient was never initialized"));
             return;
         }
 
         if (signInResult == null) {
-          savedCallbackContext.error("SignInResult is null");
+          savedCallbackContext.error(toStatus("error", "SignInResult is null"));
           return;
         }
 
@@ -327,7 +327,7 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
             Log.i(TAG, "Wasn't signed in");
 
             //Return the status code to be handled client side
-            savedCallbackContext.error(signInResult.getStatus().getStatusCode());
+            savedCallbackContext.error(toStatus("error", String.valueOf(signInResult.getStatus().getStatusCode())));
         } else {
             new AsyncTask<Void, Void, Void>() {
                 @Override
@@ -349,9 +349,9 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
                         result.put("familyName", acct.getFamilyName());
                         result.put("givenName", acct.getGivenName());
                         result.put("imageUrl", acct.getPhotoUrl());
-                        savedCallbackContext.success(result);
+                        savedCallbackContext.success(result.toString());
                     } catch (Exception e) {
-                        savedCallbackContext.error("Trouble obtaining result, error: " + e.getMessage());
+                        savedCallbackContext.error(toStatus("error", "Trouble obtaining result, error: " + e.getMessage()));
                     }
                     return null;
                 }
@@ -383,11 +383,11 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
             // strip the last ':'
             strResult = strResult.substring(0, strResult.length()-1);
             strResult = strResult.toUpperCase();
-            this.savedCallbackContext.success(strResult);
+            this.savedCallbackContext.success(toStatus("success", strResult));
 
         } catch (Exception e) {
             e.printStackTrace();
-            savedCallbackContext.error(e.getMessage());
+            savedCallbackContext.error(toStatus("error", e.getMessage()));
         }
     }
 
@@ -447,5 +447,12 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
         }
         reader.close();
         return sb.toString();
+    }
+
+    public static String toStatus(String status, String message) {
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("status", status);
+        jsonResponse.put("message", message);
+        return jsonResponse.toString();
     }
 }

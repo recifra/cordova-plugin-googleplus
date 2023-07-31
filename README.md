@@ -4,13 +4,9 @@
 [![Downloads][downloads-image]][npm-url]
 [![Twitter Follow][twitter-image]][twitter-url]
 
-[build-status]:https://travis-ci.org/EddyVerbruggen/cordova-plugin-googleplus.svg?branch=master
-[build-url]:https://travis-ci.org/EddyVerbruggen/cordova-plugin-googleplus
-[npm-image]:http://img.shields.io/npm/v/cordova-plugin-googleplus.svg
-[npm-url]:https://npmjs.org/package/cordova-plugin-googleplus
-[downloads-image]:http://img.shields.io/npm/dm/cordova-plugin-googleplus.svg
-[twitter-image]:https://img.shields.io/twitter/follow/eddyverbruggen.svg?style=social&label=Follow%20me
-[twitter-url]:https://twitter.com/eddyverbruggen
+[npm-image]:http://img.shields.io/npm/v/cordova-plugin-googleplus-standard.svg
+[npm-url]:https://npmjs.org/package/cordova-plugin-googleplus-standard
+[downloads-image]:http://img.shields.io/npm/dm/cordova-plugin-googleplus-standard.svg
 
 > ⚠️ From plugin version 6.0.0 the minimum required cordova-ios version is 4.5.0. Need to use a lower cordova-ios version? Use plugin version 5.3.2 or lower.
 
@@ -40,15 +36,15 @@ This plugin only wraps access to the Google Sign-In API. Further API access shou
 
 Android
 
-<img src="https://raw.githubusercontent.com/EddyVerbruggen/cordova-plugin-googleplus/master/screenshots/Android1.png" width="235" height="400"/>&nbsp;
-<img src="https://raw.githubusercontent.com/EddyVerbruggen/cordova-plugin-googleplus/master/screenshots/Android2.png" width="235" height="400"/>&nbsp;
-<img src="https://raw.githubusercontent.com/EddyVerbruggen/cordova-plugin-googleplus/master/screenshots/Android3.png" width="235" height="400"/>
+<img src="https://raw.githubusercontent.com/recifra/cordova-plugin-googleplus/master/screenshots/Android1.png" width="235" height="400"/>&nbsp;
+<img src="https://raw.githubusercontent.com/recifra/cordova-plugin-googleplus/master/screenshots/Android2.png" width="235" height="400"/>&nbsp;
+<img src="https://raw.githubusercontent.com/recifra/cordova-plugin-googleplus/master/screenshots/Android3.png" width="235" height="400"/>
 
  iOS
 
-<img src="https://raw.githubusercontent.com/EddyVerbruggen/cordova-plugin-googleplus/master/screenshots/iOS1.png" width="235" height="417"/>&nbsp;
-<img src="https://raw.githubusercontent.com/EddyVerbruggen/cordova-plugin-googleplus/master/screenshots/iOS2.png" width="235" height="417"/>&nbsp;
-<img src="https://raw.githubusercontent.com/EddyVerbruggen/cordova-plugin-googleplus/master/screenshots/iOS3.png" width="235" height="417"/>&nbsp;
+<img src="https://raw.githubusercontent.com/recifra/cordova-plugin-googleplus/master/screenshots/iOS1.png" width="235" height="417"/>&nbsp;
+<img src="https://raw.githubusercontent.com/recifra/cordova-plugin-googleplus/master/screenshots/iOS2.png" width="235" height="417"/>&nbsp;
+<img src="https://raw.githubusercontent.com/recifra/cordova-plugin-googleplus/master/screenshots/iOS3.png" width="235" height="417"/>&nbsp;
 
 ## 3. Google API setup
 To communicate with Google you need to do some tedious setup, sorry.
@@ -114,15 +110,15 @@ This plugin is compatible with:
 
 Here's how it works (backup your project first!):
 
-Using the Cordova CLI and [npm](https://www.npmjs.com/package/cordova-plugin-googleplus):
+Using the Cordova CLI and [npm](https://www.npmjs.com/package/cordova-plugin-googleplus-standard):
 ```
-$ cordova plugin add cordova-plugin-googleplus --save --variable REVERSED_CLIENT_ID=myreversedclientid --variable WEB_APPLICATION_CLIENT_ID=mywebapplicationclientid
+$ cordova plugin add cordova-plugin-googleplus-standard --save --variable REVERSED_CLIENT_ID=myreversedclientid --variable WEB_APPLICATION_CLIENT_ID=mywebapplicationclientid
 $ cordova prepare
 ```
 
-Using the Cordova CLI to fetch the latest version from GitHub:
+Using the Cordova CLI to fetch the latest version from GitHub (not recommended):
 ```
-$ cordova plugin add https://github.com/EddyVerbruggen/cordova-plugin-googleplus --save --variable REVERSED_CLIENT_ID=myreversedclientid  --variable WEB_APPLICATION_CLIENT_ID=mywebapplicationclientid
+$ cordova plugin add https://github.com/recifra/cordova-plugin-googleplus --save --variable REVERSED_CLIENT_ID=myreversedclientid  --variable WEB_APPLICATION_CLIENT_ID=mywebapplicationclientid
 $ cordova prepare
 ```
 
@@ -155,7 +151,7 @@ Add this to your config.xml:
 
 For the (stable) NPM Version:
 ```xml
-<plugin name="cordova-plugin-googleplus" source="npm">
+<plugin name="cordova-plugin-googleplus-standard" source="npm">
   <variable name="REVERSED_CLIENT_ID" value="myreversedclientid" />
   <variable name="WEB_APPLICATION_CLIENT_ID" value="mywebapplicationclientid" />
 </plugin>
@@ -163,7 +159,7 @@ For the (stable) NPM Version:
 
 For the latest version from Git (not recommended):
 ```xml
-<plugin spec="https://github.com/EddyVerbruggen/cordova-plugin-googleplus.git" source="git">
+<plugin spec="https://github.com/recifra/cordova-plugin-googleplus.git" source="git">
   <variable name="REVERSED_CLIENT_ID" value="myreversedclientid" />
   <variable name="WEB_APPLICATION_CLIENT_ID" value="mywebapplicationclientid" />
 <plugin>
@@ -221,18 +217,18 @@ window.plugins.googleplus.login(
       'webClientId': 'client id of the web app/server side', // optional clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
       'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
     },
-    function (obj) {
-      alert(JSON.stringify(obj)); // do something useful instead of alerting
+    function (json) {
+      alert(json); // do something useful instead of alerting
     },
-    function (msg) {
-      alert('error: ' + msg);
+    function (json) {
+      alert('error: ' + json);
     }
 );
 ```
 
-The success callback (second argument) gets a JSON object with the following contents, with example data of my Google account:
+The success callback (second argument) gets a JSON string with the following contents, with example data of my Google account:
 ```javascript
- obj.email          // 'eddyverbruggen@gmail.com'
+ obj.email          // 'recifra@gmail.com'
  obj.userId         // user id
  obj.displayName    // 'Eddy Verbruggen'
  obj.familyName     // 'Verbruggen'
@@ -245,7 +241,7 @@ The success callback (second argument) gets a JSON object with the following con
 
 Additional user information is available by use case. Add the scopes needed to the scopes option then return the info to the result object being created in the `handleSignInResult` and `didSignInForUser` functions on Android and iOS, respectively.
 
-On Android, the error callback (third argument) receives an error status code if authentication was not successful. A description of those status codes can be found on Google's android developer website at [GoogleSignInStatusCodes](https://developers.google.com/android/reference/com/google/android/gms/auth/api/signin/GoogleSignInStatusCodes).
+On Android, the error callback (third argument) receives an JSON string with error status and code into message if authentication was not successful. A description of those status codes can be found on Google's android developer website at [GoogleSignInStatusCodes](https://developers.google.com/android/reference/com/google/android/gms/auth/api/signin/GoogleSignInStatusCodes).
 
 On iOS, the error callback will include an [NSError localizedDescription](https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSError_Class/).
 
@@ -253,8 +249,8 @@ On iOS, the error callback will include an [NSError localizedDescription](https:
 This will clear the OAuth2 token.
 ``` javascript
 window.plugins.googleplus.logout(
-    function (msg) {
-      alert(msg); // do something useful instead of alerting
+    function (json) {
+      alert(json); // do something useful instead of alerting
     }
 );
 ```
@@ -263,8 +259,8 @@ window.plugins.googleplus.logout(
 This will clear the OAuth2 token, forget which account was used to login, and disconnect that account from the app. This will require the user to allow the app access again next time they sign in. Be aware that this effect is not always instantaneous. It can take time to completely disconnect.
 ``` javascript
 window.plugins.googleplus.disconnect(
-    function (msg) {
-      alert(msg); // do something useful instead of alerting
+    function (json) {
+      alert(json); // do something useful instead of alerting
     }
 );
 ```
