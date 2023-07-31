@@ -2,7 +2,6 @@
 
 [![NPM version][npm-image]][npm-url]
 [![Downloads][downloads-image]][npm-url]
-[![Twitter Follow][twitter-image]][twitter-url]
 
 [npm-image]:http://img.shields.io/npm/v/cordova-plugin-googleplus-standard.svg
 [npm-url]:https://npmjs.org/package/cordova-plugin-googleplus-standard
@@ -151,7 +150,7 @@ Add this to your config.xml:
 
 For the (stable) NPM Version:
 ```xml
-<plugin name="cordova-plugin-googleplus-standard" source="npm">
+<plugin name="cordova-plugin-googleplus" source="npm">
   <variable name="REVERSED_CLIENT_ID" value="myreversedclientid" />
   <variable name="WEB_APPLICATION_CLIENT_ID" value="mywebapplicationclientid" />
 </plugin>

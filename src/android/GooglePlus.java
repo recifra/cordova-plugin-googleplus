@@ -450,9 +450,13 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
     }
 
     public static String toStatus(String status, String message) {
-        JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("status", status);
-        jsonResponse.put("message", message);
-        return jsonResponse.toString();
+        try {
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("status", status);
+            jsonResponse.put("message", message);
+            return jsonResponse.toString();
+        } catch (JSONException e) {
+            return "{\"status\": \"error\", \"message\": \"Failed to convert status into JSON\"}";
+        }
     }
 }
