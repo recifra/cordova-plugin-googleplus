@@ -150,7 +150,7 @@ Add this to your config.xml:
 
 For the (stable) NPM Version:
 ```xml
-<plugin name="cordova-plugin-googleplus" source="npm">
+<plugin name="cordova-plugin-googleplus-standard" source="npm">
   <variable name="REVERSED_CLIENT_ID" value="myreversedclientid" />
   <variable name="WEB_APPLICATION_CLIENT_ID" value="mywebapplicationclientid" />
 </plugin>
