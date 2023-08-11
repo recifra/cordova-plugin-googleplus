@@ -1,28 +1,26 @@
 function GooglePlus() {
 }
 
-GooglePlus.prototype.isAvailable = function (callback) {
-  cordova.exec(callback, null, "GooglePlus", "isAvailable", []);
-};
+function makeCbWithProcessedResult(callback) {
+  return function processCallback(result) {
+    return callback.call(this, JSON.parse(result));
+  }
+}
 
 GooglePlus.prototype.login = function (options, successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, "GooglePlus", "login", [options]);
-};
-
-GooglePlus.prototype.trySilentLogin = function (options, successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, "GooglePlus", "trySilentLogin", [options]);
+  cordova.exec(makeCbWithProcessedResult(successCallback), makeCbWithProcessedResult(errorCallback), "GooglePlus", "login", [options]);
 };
 
 GooglePlus.prototype.logout = function (successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, "GooglePlus", "logout", []);
+  cordova.exec(makeCbWithProcessedResult(successCallback), makeCbWithProcessedResult(errorCallback), "GooglePlus", "logout", []);
 };
 
 GooglePlus.prototype.disconnect = function (successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, "GooglePlus", "disconnect", []);
+  cordova.exec(makeCbWithProcessedResult(successCallback), makeCbWithProcessedResult(errorCallback), "GooglePlus", "disconnect", []);
 };
 
 GooglePlus.prototype.getSigningCertificateFingerprint = function (successCallback, errorCallback) {
-  cordova.exec(successCallback, errorCallback, "GooglePlus", "getSigningCertificateFingerprint", []);
+  cordova.exec(makeCbWithProcessedResult(successCallback), makeCbWithProcessedResult(errorCallback), "GooglePlus", "getSigningCertificateFingerprint", []);
 };
 
 GooglePlus.install = function () {

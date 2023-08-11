@@ -47,9 +47,7 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConnectionFailedListener {
 
-    public static final String ACTION_IS_AVAILABLE = "isAvailable";
     public static final String ACTION_LOGIN = "login";
-    public static final String ACTION_TRY_SILENT_LOGIN = "trySilentLogin";
     public static final String ACTION_LOGOUT = "logout";
     public static final String ACTION_DISCONNECT = "disconnect";
     public static final String ACTION_GET_SIGNING_CERTIFICATE_FINGERPRINT = "getSigningCertificateFingerprint";
@@ -59,7 +57,7 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
     private final static String FIELD_TOKEN_EXPIRES_IN  = "expires_in";
     private final static String VERIFY_TOKEN_URL        = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=";
 
-    //String options/config object names passed in to login and trySilentLogin
+    //String options/config object names passed in to login
     public static final String ARGUMENT_WEB_CLIENT_ID = "webClientId";
     public static final String ARGUMENT_SCOPES = "scopes";
     public static final String ARGUMENT_OFFLINE_KEY = "offline";
@@ -98,24 +96,13 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         this.savedCallbackContext = callbackContext;
 
-        if (ACTION_IS_AVAILABLE.equals(action)) {
-            final boolean available = true;
-            savedCallbackContext.success(toStatus("success", String.valueOf(available)));
-
-        } else if (ACTION_LOGIN.equals(action)) {
+        if (ACTION_LOGIN.equals(action)) {
             //pass args into api client build
             buildGoogleApiClient(args.optJSONObject(0));
 
             // Tries to Log the user in
             Log.i(TAG, "Trying to Log in!");
             signIn();
-
-        } else if (ACTION_TRY_SILENT_LOGIN.equals(action)) {
-            //pass args into api client build
-            buildGoogleApiClient(args.optJSONObject(0));
-
-            Log.i(TAG, "Trying to do silent login!");
-            trySilentLogin();
 
         } else if (ACTION_LOGOUT.equals(action)) {
             Log.i(TAG, "Trying to logout!");
@@ -216,22 +203,11 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
     }
 
     /**
-     * Tries to log the user in silently using existing sign in result information
-     */
-    private void trySilentLogin() {
-        ConnectionResult apiConnect =  mGoogleApiClient.blockingConnect();
-
-        if (apiConnect.isSuccess()) {
-            handleSignInResult(Auth.GoogleSignInApi.silentSignIn(this.mGoogleApiClient).await());
-        }
-    }
-
-    /**
      * Signs the user out from the client
      */
     private void signOut() {
         if (this.mGoogleApiClient == null) {
-            savedCallbackContext.error(toStatus("error", "Please use login or trySilentLogin before logging out"));
+            savedCallbackContext.error(toStatus("error", "Please use login before logging out"));
             return;
         }
 
@@ -259,7 +235,7 @@ public class GooglePlus extends CordovaPlugin implements GoogleApiClient.OnConne
      */
     private void disconnect() {
         if (this.mGoogleApiClient == null) {
-            savedCallbackContext.error(toStatus("error", "Please use login or trySilentLogin before disconnecting"));
+            savedCallbackContext.error(toStatus("error", "Please use login before disconnecting"));
             return;
         }
 
