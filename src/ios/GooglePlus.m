@@ -61,6 +61,8 @@
                            @"email"           : email,
                            @"userId"          : userId,
                            @"idToken"         : user.authentication.idToken,
+                           @"accessToken"     : user.authentication.accessToken,
+                           @"serverAuthCode"  : user.serverAuthCode     ? : [NSNull null],
                            @"displayName"     : user.profile.name       ? : [NSNull null],
                            @"givenName"       : user.profile.givenName  ? : [NSNull null],
                            @"familyName"      : user.profile.familyName ? : [NSNull null],
